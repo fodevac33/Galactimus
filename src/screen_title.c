@@ -1,6 +1,9 @@
 #include "raylib.h"
 #include "screens.h"
 
+#define RAYGUI_IMPLEMENTATION
+#include "raygui.h"
+
 //----------------------------------------------------------------------------------
 // Module Variables Definition (local)
 //----------------------------------------------------------------------------------
@@ -14,7 +17,6 @@ static int finishScreen = 0;
 // Title Screen Initialization logic
 void InitTitleScreen(void)
 {
-    // TODO: Initialize TITLE screen variables here!
     framesCounter = 0;
     finishScreen = 0;
 }
@@ -22,31 +24,53 @@ void InitTitleScreen(void)
 // Title Screen Update logic
 void UpdateTitleScreen(void)
 {
-    // TODO: Update TITLE screen variables here!
-
-    // Press enter or tap to change to GAMEPLAY screen
-    if (IsKeyPressed(KEY_ENTER) || IsGestureDetected(GESTURE_TAP))
-    {
-        //finishScreen = 1;   // OPTIONS
-        finishScreen = 2;   // GAMEPLAY
-        PlaySound(fxCoin);
+    int screenWidth = GetScreenWidth();
+    int screenHeight = GetScreenHeight();
+    
+    // Calculate menu positions
+    Rectangle menuRect = { screenWidth/2 - 150, screenHeight/2 - 150, 300, 300 };
+    Rectangle newGameBtn = { menuRect.x + 50, menuRect.y + 100, 200, 40 };
+    Rectangle continueBtn = { menuRect.x + 50, menuRect.y + 150, 200, 40 };
+    Rectangle settingsBtn = { menuRect.x + 50, menuRect.y + 200, 200, 40 };
+    Rectangle exitBtn = { menuRect.x + 50, menuRect.y + 250, 200, 40 };
+    
+    // Handle button clicks
+    if (GuiButton(newGameBtn, "NEW GAME")) {
+        // TODO: Implement new game
+    }
+    if (GuiButton(continueBtn, "CONTINUE")) {
+        // TODO: Implement continue
+    }
+    if (GuiButton(settingsBtn, "SETTINGS")) {
+        // TODO: Implement settings
+    }
+    if (GuiButton(exitBtn, "EXIT")) {
+        finishScreen = -1;  // Signal to close the window
     }
 }
 
 // Title Screen Draw logic
 void DrawTitleScreen(void)
 {
-    // TODO: Draw TITLE screen here!
-    DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), GREEN);
-    Vector2 pos = { 20, 10 };
-    DrawTextEx(font, "TITLE SCREEN", pos, font.baseSize*3.0f, 4, DARKGREEN);
-    DrawText("PRESS ENTER or TAP to JUMP to GAMEPLAY SCREEN", 120, 220, 20, DARKGREEN);
+    int screenWidth = GetScreenWidth();
+    int screenHeight = GetScreenHeight();
+    
+    // Draw white background
+    DrawRectangle(0, 0, screenWidth, screenHeight, WHITE);
+    
+    // Draw title window
+    Rectangle titleRect = { screenWidth/2 - 200, 50, 400, 80 };
+    GuiWindowBox(titleRect, "GALACTIMUS");
+    
+    // Draw menu window
+    Rectangle menuRect = { screenWidth/2 - 150, screenHeight/2 - 150, 300, 300 };
+    GuiWindowBox(menuRect, "MAIN MENU");
 }
 
 // Title Screen Unload logic
 void UnloadTitleScreen(void)
 {
-    // TODO: Unload TITLE screen variables here!
+    // Unload any loaded resources here
 }
 
 // Title Screen should finish?
