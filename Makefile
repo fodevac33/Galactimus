@@ -1,6 +1,6 @@
 .PHONY: all build run clean
 
-PROJECT_NAME := stellaris-2
+PROJECT_NAME := galactimus
 
 all: build
 
