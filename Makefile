@@ -1,6 +1,5 @@
 .PHONY: all build run clean
 
-# Extract project name from CMakeLists.txt
 PROJECT_NAME := stellaris-2
 
 all: build
