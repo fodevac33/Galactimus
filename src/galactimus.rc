@@ -9,14 +9,14 @@ BEGIN
 	//BLOCK "080904E4" 	// English UK
     BLOCK "040904E4"	// English US
     BEGIN
-      VALUE "CompanyName", "raylib technologies"
-      VALUE "FileDescription", "raylib-game | A great game"
+      VALUE "CompanyName", "Fodev Games"
+      VALUE "FileDescription", "space"
       VALUE "FileVersion", "1.0"
-      VALUE "InternalName", "raylib-game"
+      VALUE "InternalName", "Time Sink"
       VALUE "LegalCopyright", "(c) 2025 raylib technologies (@raylibtech)"
       //VALUE "OriginalFilename", "raylib_app.exe"
-      VALUE "ProductName", "raylib-game"
-      VALUE "ProductVersion", "1.0"
+      VALUE "ProductName", "Galactimus"
+      VALUE "ProductVersion", "pre-apha 0.1"
     END
   END
   BLOCK "VarFileInfo"
