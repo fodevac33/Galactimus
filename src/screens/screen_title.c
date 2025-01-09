@@ -27,25 +27,29 @@ void UpdateTitleScreen(void)
     int screenWidth = GetScreenWidth();
     int screenHeight = GetScreenHeight();
     
-    // Calculate menu positions
-    Rectangle menuRect = { screenWidth/2 - 150, screenHeight/2 - 150, 300, 300 };
-    Rectangle newGameBtn = { menuRect.x + 50, menuRect.y + 100, 200, 40 };
-    Rectangle continueBtn = { menuRect.x + 50, menuRect.y + 150, 200, 40 };
-    Rectangle settingsBtn = { menuRect.x + 50, menuRect.y + 200, 200, 40 };
-    Rectangle exitBtn = { menuRect.x + 50, menuRect.y + 250, 200, 40 };
+    // Calculate button positions using screen-relative sizing
+    int buttonWidth = screenWidth * 0.4;  // 40% of screen width
+    int buttonHeight = screenHeight * 0.1; // 10% of screen height
+    int buttonSpacing = buttonHeight * 0.25; // 25% of button height
+    int startY = screenHeight/2 - (4 * buttonHeight + 3 * buttonSpacing)/2;
+    
+    Rectangle newGameBtn = { screenWidth/2 - buttonWidth/2, startY, buttonWidth, buttonHeight };
+    Rectangle continueBtn = { screenWidth/2 - buttonWidth/2, startY + buttonHeight + buttonSpacing, buttonWidth, buttonHeight };
+    Rectangle settingsBtn = { screenWidth/2 - buttonWidth/2, startY + 2*(buttonHeight + buttonSpacing), buttonWidth, buttonHeight };
+    Rectangle exitBtn = { screenWidth/2 - buttonWidth/2, startY + 3*(buttonHeight + buttonSpacing), buttonWidth, buttonHeight };
     
     // Handle button clicks
     if (GuiButton(newGameBtn, "NEW GAME")) {
-        // TODO: Implement new game
+        finishScreen = GAMEPLAY;  
     }
     if (GuiButton(continueBtn, "CONTINUE")) {
         // TODO: Implement continue
     }
     if (GuiButton(settingsBtn, "SETTINGS")) {
-        // TODO: Implement settings
+        finishScreen = OPTIONS;  
     }
     if (GuiButton(exitBtn, "EXIT")) {
-        finishScreen = -1;  // Signal to close the window
+        finishScreen = ENDING;  // Signal to close the window
     }
 }
 
@@ -58,13 +62,29 @@ void DrawTitleScreen(void)
     // Draw white background
     DrawRectangle(0, 0, screenWidth, screenHeight, WHITE);
     
-    // Draw title window
-    Rectangle titleRect = { screenWidth/2 - 200, 50, 400, 80 };
-    GuiWindowBox(titleRect, "GALACTIMUS");
+    // Draw title text
+    const char* title = "GALACTIMUS";
+    int titleWidth = MeasureText(title, 60);
+    DrawText(title, screenWidth/2 - titleWidth/2, 50, 60, BLACK);
     
-    // Draw menu window
-    Rectangle menuRect = { screenWidth/2 - 150, screenHeight/2 - 150, 300, 300 };
-    GuiWindowBox(menuRect, "MAIN MENU");
+    // Draw buttons directly on white background
+    int buttonWidth = screenWidth * 0.4;  // 40% of screen width
+    int buttonHeight = screenHeight * 0.1; // 10% of screen height
+    int buttonSpacing = buttonHeight * 0.25; // 25% of button height
+    int startY = screenHeight/2 - (4 * buttonHeight + 3 * buttonSpacing)/2;
+    
+    Rectangle newGameBtn = { screenWidth/2 - buttonWidth/2, startY, buttonWidth, buttonHeight };
+    Rectangle continueBtn = { screenWidth/2 - buttonWidth/2, startY + buttonHeight + buttonSpacing, buttonWidth, buttonHeight };
+    Rectangle settingsBtn = { screenWidth/2 - buttonWidth/2, startY + 2*(buttonHeight + buttonSpacing), buttonWidth, buttonHeight };
+    Rectangle exitBtn = { screenWidth/2 - buttonWidth/2, startY + 3*(buttonHeight + buttonSpacing), buttonWidth, buttonHeight };
+    
+    // Set button text size based on button height
+    GuiSetStyle(DEFAULT, TEXT_SIZE, buttonHeight * 0.5);
+    
+    GuiButton(newGameBtn, "NEW GAME");
+    GuiButton(continueBtn, "CONTINUE");
+    GuiButton(settingsBtn, "SETTINGS");
+    GuiButton(exitBtn, "EXIT");
 }
 
 // Title Screen Unload logic

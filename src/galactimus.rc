@@ -10,7 +10,7 @@ BEGIN
     BLOCK "040904E4"	// English US
     BEGIN
       VALUE "CompanyName", "Fodev Games"
-      VALUE "FileDescription", "space"
+      VALUE "FileDescription", "galactimus.exe"
       VALUE "FileVersion", "1.0"
       VALUE "InternalName", "Time Sink"
       VALUE "LegalCopyright", "(c) 2025 raylib technologies (@raylibtech)"

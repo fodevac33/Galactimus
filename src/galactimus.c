@@ -225,8 +225,10 @@ static void UpdateDrawFrame(void)
             {
                 UpdateTitleScreen();
 
-                if (FinishTitleScreen() == 1) TransitionToScreen(OPTIONS);
-                else if (FinishTitleScreen() == 2) TransitionToScreen(GAMEPLAY);
+                int finishScreen = FinishTitleScreen();
+                if (finishScreen == OPTIONS) TransitionToScreen(OPTIONS);
+                else if (finishScreen == GAMEPLAY) TransitionToScreen(GAMEPLAY);
+                else if (finishScreen == ENDING) CloseWindow();
 
             } break;
             case OPTIONS:
@@ -241,7 +243,7 @@ static void UpdateDrawFrame(void)
                 UpdateGameplayScreen();
 
                 if (FinishGameplayScreen() == 1) TransitionToScreen(ENDING);
-                //else if (FinishGameplayScreen() == 2) TransitionToScreen(TITLE);
+                else if (FinishGameplayScreen() == 2) TransitionToScreen(TITLE);
 
             } break;
             case ENDING:
