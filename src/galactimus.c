@@ -58,7 +58,7 @@ int main(void)
     PlayMusicStream(music);
 
     // Setup and init first screen
-    currentScreen = LOGO;
+    currentScreen = TITLE;
     InitLogoScreen();
 
 #if defined(PLATFORM_WEB)
@@ -228,7 +228,12 @@ static void UpdateDrawFrame(void)
                 int finishScreen = FinishTitleScreen();
                 if (finishScreen == OPTIONS) TransitionToScreen(OPTIONS);
                 else if (finishScreen == GAMEPLAY) TransitionToScreen(GAMEPLAY);
-                else if (finishScreen == ENDING) CloseWindow();
+                else if (finishScreen == ENDING) 
+                {
+                    // Proper cleanup before closing
+                    UnloadTitleScreen();
+                    CloseWindow();
+                }
 
             } break;
             case OPTIONS:

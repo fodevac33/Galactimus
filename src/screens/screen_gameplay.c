@@ -1,13 +1,24 @@
 #include "raylib.h"
 #include "screens.h"
+#include <stdlib.h>
 
 //----------------------------------------------------------------------------------
 // Module Variables Definition (local)
 //----------------------------------------------------------------------------------
 static int framesCounter = 0;
 static int finishScreen = 0;
-static Vector2 rectPos = { 0, 0 };
-static const float moveSpeed = 200.0f;
+
+#define GRID_SIZE 10
+#define CELL_SIZE 60
+#define GRID_OFFSET_X GetScreenWidth() / 2
+#define GRID_OFFSET_Y GetScreenHeight() / 2
+
+typedef struct {
+    Vector2 position;
+    int energy;
+} StarSystem;
+
+static StarSystem starSystems[GRID_SIZE][GRID_SIZE];
 
 //----------------------------------------------------------------------------------
 // Gameplay Screen Functions Definition
@@ -16,40 +27,63 @@ static const float moveSpeed = 200.0f;
 // Gameplay Screen Initialization logic
 void InitGameplayScreen(void)
 {
-    // TODO: Initialize GAMEPLAY screen variables here!
     framesCounter = 0;
     finishScreen = 0;
+    
+    // Initialize star systems grid
+    for (int x = 0; x < GRID_SIZE; x++) {
+        for (int y = 0; y < GRID_SIZE; y++) {
+            starSystems[x][y].position = (Vector2){
+                (x - GRID_SIZE / 2) * CELL_SIZE + GRID_OFFSET_X, 
+                (y - GRID_SIZE / 2) * CELL_SIZE + GRID_OFFSET_Y
+            };
+            starSystems[x][y].energy = rand() % 100 + 1; // Random energy between 1-100
+        }
+    }
 }
 
 // Gameplay Screen Update logic
 void UpdateGameplayScreen(void)
 {
-    // TODO: Update GAMEPLAY screen variables here!
-    
-    // Move rectangle with arrow keys
-    if (IsKeyDown(KEY_RIGHT)) rectPos.x += moveSpeed * GetFrameTime();
-    if (IsKeyDown(KEY_LEFT)) rectPos.x -= moveSpeed * GetFrameTime();
-    if (IsKeyDown(KEY_DOWN)) rectPos.y += moveSpeed * GetFrameTime();
-    if (IsKeyDown(KEY_UP)) rectPos.y -= moveSpeed * GetFrameTime();
-
-    // Press enter or tap to change to ENDING screen
-    if (IsKeyPressed(KEY_ENTER) || IsGestureDetected(GESTURE_TAP))
-    {
+    // Check for screen transition
+    if (IsKeyPressed(KEY_ENTER) || IsGestureDetected(GESTURE_TAP)) {
         finishScreen = 1;
-        PlaySound(fxCoin);
     }
 }
 
 // Gameplay Screen Draw logic
 void DrawGameplayScreen(void)
 {
-    // TODO: Draw GAMEPLAY screen here!
-    DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), PURPLE);
-    Vector2 pos = { 20, 10 };
-    DrawTextEx(font, "GAMEPLAY SCREEN", pos, font.baseSize*3.0f, 4, MAROON);
-    DrawText("PRESS ENTER or TAP to JUMP to ENDING SCREEN", 130, 220, 20, MAROON);
+    // Black background
+    ClearBackground(RAYWHITE);
 
-    DrawRectangle(rectPos.x, rectPos.y, 100, 100, GREEN);
+    // Draw star systems grid
+    for (int x = 0; x < GRID_SIZE; x++) {
+        for (int y = 0; y < GRID_SIZE; y++) {
+            // Draw cell with border
+            DrawRectangleV(starSystems[x][y].position, (Vector2){CELL_SIZE, CELL_SIZE}, WHITE);
+            DrawRectangleLinesEx((Rectangle){
+                starSystems[x][y].position.x,
+                starSystems[x][y].position.y,
+                CELL_SIZE,
+                CELL_SIZE
+            }, 1, LIGHTGRAY);
+            
+            // Check for mouse hover
+            Vector2 mousePos = GetMousePosition();
+            if (CheckCollisionPointRec(mousePos, (Rectangle){
+                starSystems[x][y].position.x,
+                starSystems[x][y].position.y,
+                CELL_SIZE,
+                CELL_SIZE
+            })) {
+                // Draw energy text
+                char energyText[16];
+                snprintf(energyText, sizeof(energyText), "Energy: %d", starSystems[x][y].energy);
+                DrawText(energyText, mousePos.x + 10, mousePos.y - 20, 20, ORANGE);
+            }
+        }
+    }
 }
 
 // Gameplay Screen Unload logic
