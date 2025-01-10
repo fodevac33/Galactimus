@@ -57,7 +57,7 @@ void DrawGameplayScreen(void)
     // Black background
     ClearBackground(RAYWHITE);
 
-    // Draw star systems grid
+    // First pass: Draw all cells
     for (int x = 0; x < GRID_SIZE; x++) {
         for (int y = 0; y < GRID_SIZE; y++) {
             // Draw cell with border
@@ -67,8 +67,13 @@ void DrawGameplayScreen(void)
                 starSystems[x][y].position.y,
                 CELL_SIZE,
                 CELL_SIZE
-            }, 1, LIGHTGRAY);
-            
+            }, 1, GRAY);
+        }
+    }
+
+    // Second pass: Draw hover effects
+    for (int x = 0; x < GRID_SIZE; x++) {
+        for (int y = 0; y < GRID_SIZE; y++) {
             // Check for mouse hover
             Vector2 mousePos = GetMousePosition();
             if (CheckCollisionPointRec(mousePos, (Rectangle){
@@ -80,7 +85,16 @@ void DrawGameplayScreen(void)
                 // Draw energy text
                 char energyText[16];
                 snprintf(energyText, sizeof(energyText), "Energy: %d", starSystems[x][y].energy);
-                DrawText(energyText, mousePos.x + 10, mousePos.y - 20, 20, ORANGE);
+                
+                // Calculate text position relative to mouse
+                Vector2 textSize = MeasureTextEx(GetFontDefault(), energyText, 20, 1);
+                Vector2 textPos = {
+                    mousePos.x + 10,
+                    mousePos.y - 20
+                };
+                
+                // Draw text
+                DrawText(energyText, textPos.x, textPos.y, 20, ORANGE);
             }
         }
     }
